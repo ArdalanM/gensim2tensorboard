@@ -1,5 +1,6 @@
-# gensim2tensorboard
-Train word embeddings with gensim and visualize them with TensorBoard.
+# gensim2tensorboard:
+Train word embeddings with [gensim](https://github.com/RaRe-Technologies/gensim) and visualize them with [TensorBoard](https://www.tensorflow.org/how_tos/embedding_viz/).
+
 ![fig](fig/fig.png "fig")
 
 ## Requirements:
