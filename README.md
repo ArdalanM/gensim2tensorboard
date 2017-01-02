@@ -8,6 +8,10 @@ Train word embeddings with [gensim](https://github.com/RaRe-Technologies/gensim)
 - gensim
 - tensorflow (>= 0.12)
 
+## Installation:
+```
+git clone https://github.com/ArdalanM/gensim2tensorboard.git
+```
 
 ## Example:
 - Train from text file:
