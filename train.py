@@ -61,21 +61,10 @@ def preprocessing(sentence):
     """
     Add a custom pre-processing on sentence before feeding them to word2vec
     """
-    # Lower sentence: 'Hey, Iam 28 !' ==> 'hey, iam 28 !'
     sentence = sentence.lower()
-
-    # Replace punctuation by white space: 'hey, iam 28 !' ==> 'hey  iam 28  '
     sentence = re.sub(r'[^\P{P}\']+', ' ', sentence)
-
-    # Replace digits by white space: 'hey  iam 28  ' ==> 'hey, iam     '
-    sentence = re.sub(r'[0-9]+', ' ', sentence)
-
-    # Replace white spaces by one white space: 'hey  iam     ' ==> 'hey  iam '
     sentence = re.sub(r'\s+', ' ', sentence)
-
-    # Merge sentences and strip: ['_hey_', '_iam_ '] ==> '_hey_ _iam_'
     sentence = "".join(sentence).strip()
-
     return sentence
 
 

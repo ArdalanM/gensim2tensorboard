@@ -1,5 +1,6 @@
 # gensim2tensorboard
-Train word embeddings with gensim and visualize them with TensorBoard
+Train word embeddings with gensim and visualize them with TensorBoard.
+![fig](fig/fig.png "fig")
 
 ## Requirements:
 - regex
@@ -8,14 +9,14 @@ Train word embeddings with gensim and visualize them with TensorBoard
 
 
 ## Example:
-1. Train from text file:
+- Train from text file:
 ```
 python train.py --file "data/SMSSpamCollection.txt" \
                 --input_type 'txt' \
                 --folder "model_from_txt"
 ```
 
-2. Train from csv file:
+- Train from csv file:
 ```
 python train.py --file "data/movie_reviews.csv" \
                 --input_type "csv" \
@@ -24,7 +25,7 @@ python train.py --file "data/movie_reviews.csv" \
                 --columns_to_select "Phrase"
 ```
 
-3. Train with custom word2vec parameters:
+- Train with custom word2vec parameters:
 ```
 python train.py --file "data/movie_reviews.csv" \
                 --input_type "csv" \
@@ -50,5 +51,8 @@ python train.py --file "data/movie_reviews.csv" \
 
 Eventially, visualize the embeddings with tensorboard:
 ```
-tensorboard --logdir=. --reload_interval 1
+tensorboard --logdir=./ --reload_interval 1
 ```
+
+You should be able to run the above script on your own dataset, just
+dump them into the `data` folder 
