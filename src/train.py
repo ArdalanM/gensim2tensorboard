@@ -11,13 +11,15 @@ is strictly prohibited.
 @brief:
 """
 
-import os
-import json
-import time
 import argparse
+import json
 import logging
+import os
+import time
+
 import regex as re
-from models import CsvConnector, TxtConnector, Word2Vec, create_embeddings
+
+from src.models import CsvConnector, TxtConnector, Word2Vec, Bigram, create_embeddings
 
 
 def get_args():
@@ -25,19 +27,15 @@ def get_args():
 
     parser.add_argument("--file", default="data/movie_reviews.csv")
 
-    parser.add_argument("--input_type", choices=['csv', 'txt'], default='csv', help="The kind of input data")
+    parser.add_argument("--input_type", choices=['csv', 'txt'],
+                        default="csv", help="The kind of input data")
 
-    parser.add_argument("--separator", type=str, default=',',
-                        help="csv separator (only if input_type == 'csv'")
+    parser.add_argument("--separator", type=str, default=',', help="csv separator")
 
-    parser.add_argument("--columns_to_select", nargs='*', default=["Phrase"],
-                        help="Columns of your csv to select (only if input_type == 'csv')."
-                             "You must select at least one column."),
+    parser.add_argument("--columns_to_select", nargs='*', default=["Phrase"], help="list of csv column names.")
+    parser.add_argument("--columns_joining_token", type=str, default='. ', help="join multiple csv columns.")
 
-    parser.add_argument("--columns_joining_token", type=str, default='. ',
-                        help="token that will join multiple csv columns (only if input_type == 'csv').")
-
-    parser.add_argument("--folder", default="123")
+    parser.add_argument("--folder", default="models/movie_reviews")
     parser.add_argument("--size", type=int, default=100)
     parser.add_argument("--alpha", type=float, default=0.025)
     parser.add_argument("--window", type=int, default=5)
@@ -82,14 +80,18 @@ if __name__ == '__main__':
                                           separator=params.separator,
                                           columns_to_select=params.columns_to_select,
                                           columns_joining_token=params.columns_joining_token)
-    else:
+    elif params.input_type == 'txt':
         sentence_generator = TxtConnector(filepath=params.file, preprocessing=preprocessing)
+    else:
+        raise
 
-    os.mkdir(params.folder)
+    generator = Bigram(sentence_generator)
+
+    os.makedirs(params.folder)
     json.dump(vars(params), open(os.path.join(params.folder, "params.json"), 'w', encoding='utf-8'), indent=2)
 
     w2v = Word2Vec(save_folder=params.folder)
-    w2v.fit(sentence_generator,
+    w2v.fit(generator,
             size=params.size,
             alpha=params.alpha,
             window=params.window,
