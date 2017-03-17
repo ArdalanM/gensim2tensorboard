@@ -30,10 +30,10 @@ def get_args():
     parser.add_argument("--input_type", choices=['csv', 'txt'],
                         default="csv", help="The kind of input data")
 
-    parser.add_argument("--separator", type=str, default=',', help="csv separator")
+    parser.add_argument("--separator", type=str, default=',', help="csv separator.")
 
-    parser.add_argument("--columns_to_select", nargs='*', default=["Phrase"], help="list of csv column names.")
-    parser.add_argument("--columns_joining_token", type=str, default='. ', help="join multiple csv columns.")
+    parser.add_argument("--columns_to_select", type=str, default="column1,column2", help="column names comma separated.")
+    parser.add_argument("--columns_joining_token", type=str, default='. ', help="join multiple columns.")
 
     parser.add_argument("--folder", default="models/movie_reviews")
     parser.add_argument("--size", type=int, default=100)
@@ -51,8 +51,8 @@ def get_args():
     parser.add_argument("--cbow_mean", type=int, default=1)
     parser.add_argument("--iter", type=int, default=5)
     parser.add_argument("--null_word", type=int, default=0)
-    params = parser.parse_args()
-    return params
+    args = parser.parse_args()
+    return args
 
 
 def preprocessing(sentence):
@@ -70,43 +70,42 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
     prefix = int(time.time())
 
-    params = get_args()
-    params.folder = os.path.realpath(params.folder)
-    print(params)
-
-    if params.input_type == 'csv':
-        sentence_generator = CsvConnector(filepath=params.file,
+    opt = get_args()
+    opt.folder = os.path.realpath(opt.folder)
+    print(opt)
+    if opt.input_type == 'csv':
+        sentence_generator = CsvConnector(filepath=opt.file,
                                           preprocessing=preprocessing,
-                                          separator=params.separator,
-                                          columns_to_select=params.columns_to_select,
-                                          columns_joining_token=params.columns_joining_token)
-    elif params.input_type == 'txt':
-        sentence_generator = TxtConnector(filepath=params.file, preprocessing=preprocessing)
+                                          separator=opt.separator,
+                                          columns_to_select=opt.columns_to_select.split(","),
+                                          columns_joining_token=opt.columns_joining_token)
+    elif opt.input_type == 'txt':
+        sentence_generator = TxtConnector(filepath=opt.file, preprocessing=preprocessing)
     else:
         raise
 
     generator = Bigram(sentence_generator)
 
-    os.makedirs(params.folder)
-    json.dump(vars(params), open(os.path.join(params.folder, "params.json"), 'w', encoding='utf-8'), indent=2)
+    os.makedirs(opt.folder)
+    json.dump(vars(opt), open(os.path.join(opt.folder, "opt.json"), 'w', encoding='utf-8'), indent=2)
 
-    w2v = Word2Vec(save_folder=params.folder)
+    w2v = Word2Vec(save_folder=opt.folder)
     w2v.fit(generator,
-            size=params.size,
-            alpha=params.alpha,
-            window=params.window,
-            min_count=params.min_count,
-            max_vocab_size=params.max_vocab_size,
-            sample=params.sample,
-            seed=params.seed,
-            workers=params.workers,
-            min_alpha=params.min_alpha,
-            sg=params.sg,
-            hs=params.hs,
-            negative=params.negative,
-            cbow_mean=params.cbow_mean,
-            iter=params.iter,
-            null_word=params.null_word)
+            size=opt.size,
+            alpha=opt.alpha,
+            window=opt.window,
+            min_count=opt.min_count,
+            max_vocab_size=opt.max_vocab_size,
+            sample=opt.sample,
+            seed=opt.seed,
+            workers=opt.workers,
+            min_alpha=opt.min_alpha,
+            sg=opt.sg,
+            hs=opt.hs,
+            negative=opt.negative,
+            cbow_mean=opt.cbow_mean,
+            iter=opt.iter,
+            null_word=opt.null_word)
 
-    create_embeddings(gensim_model=w2v.model, model_folder=params.folder)
+    create_embeddings(gensim_model=w2v.model, model_folder=opt.folder)
 
