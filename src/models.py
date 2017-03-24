@@ -40,7 +40,7 @@ class CsvConnector(object):
         with open(self.filepath, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f, delimiter=self.separator, quotechar='"')
             for line in reader:
-                sentence = self.columns_joining_token.join([line[col] for col in self.columns_to_select])
+                sentence = self.columns_joining_token.join([line[col] for col in self.columns_to_select if line[col]])
                 yield self.preprocessing(sentence).split()
 
 
