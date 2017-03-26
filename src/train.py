@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@author: Ardalan MEHRANI <ardalan.mehrani@iosquare.com>
-
-@copyright: Copyright (c) 2016, ioSquare SAS. All rights reserved.
-The information contained in this file is confidential and proprietary.
-Any reproduction, use or disclosure, in whole or in part, of this
-information without the express, prior written consent of ioSquare SAS
-is strictly prohibited.
+@author: Ardalan MEHRANI <ardalan77400@gmail.com
 
 @brief:
 """
@@ -73,6 +67,9 @@ if __name__ == '__main__':
     opt = get_args()
     opt.folder = os.path.realpath(opt.folder)
     print(opt)
+    os.makedirs(opt.folder)
+    json.dump(vars(opt), open(os.path.join(opt.folder, "opt.json"), 'w', encoding='utf-8'), indent=2)
+
     if opt.input_type == 'csv':
         sentence_generator = CsvConnector(filepath=opt.file,
                                           preprocessing=preprocessing,
@@ -85,9 +82,6 @@ if __name__ == '__main__':
         raise
 
     generator = Bigram(sentence_generator)
-
-    os.makedirs(opt.folder)
-    json.dump(vars(opt), open(os.path.join(opt.folder, "opt.json"), 'w', encoding='utf-8'), indent=2)
 
     w2v = Word2Vec(save_folder=opt.folder)
     w2v.fit(generator,
