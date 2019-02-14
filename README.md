@@ -59,7 +59,8 @@ python3 -m src.train --file "data/movie_reviews.csv" \
                      --null_word 0
 ```
 
-Eventially, visualize the embeddings with tensorboard:
+Eventially, visualize the embeddings with tensorboard: 
+run tensorboard from the project root folder.
 ```
 tensorboard --logdir=models/ --reload_interval 1
 ```
