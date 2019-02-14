@@ -102,7 +102,7 @@ class Word2Vec(object):
 
 
 def create_embeddings(gensim_model=None, model_folder=None):
-    weights = gensim_model.wv.syn0
+    weights = gensim_model.wv.vectors
     idx2words = gensim_model.wv.index2word
 
     vocab_size = weights.shape[0]
