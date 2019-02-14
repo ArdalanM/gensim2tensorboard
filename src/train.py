@@ -5,14 +5,12 @@
 @brief:
 """
 
-import argparse
-import json
-import logging
 import os
+import json
 import time
-
+import logging
+import argparse
 import regex as re
-
 from src.models import CsvConnector, TxtConnector, Word2Vec, Bigram, create_embeddings
 
 
@@ -20,15 +18,11 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--file", default="data/movie_reviews.csv")
-
     parser.add_argument("--input_type", choices=['csv', 'txt'],
                         default="csv", help="The kind of input data")
-
     parser.add_argument("--separator", type=str, default=',', help="csv separator.")
-
-    parser.add_argument("--columns_to_select", type=str, default="column1,column2", help="column names comma separated.")
+    parser.add_argument("--columns_to_select", type=str, default="Phrase", help="column names comma separated.")
     parser.add_argument("--columns_joining_token", type=str, default='. ', help="join multiple columns.")
-
     parser.add_argument("--folder", default="models/movie_reviews")
     parser.add_argument("--size", type=int, default=100)
     parser.add_argument("--alpha", type=float, default=0.025)
@@ -61,13 +55,15 @@ def preprocessing(sentence):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-    prefix = int(time.time())
 
     opt = get_args()
     opt.folder = os.path.realpath(opt.folder)
     print(opt)
-    os.makedirs(opt.folder)
+
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+    prefix = int(time.time())
+    
+    os.makedirs(opt.folder, exist_ok=True)
     json.dump(vars(opt), open(os.path.join(opt.folder, "opt.json"), 'w', encoding='utf-8'), indent=2)
 
     if opt.input_type == 'csv':
