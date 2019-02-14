@@ -4,9 +4,13 @@ Train word embeddings with [gensim](https://github.com/RaRe-Technologies/gensim)
 ![fig](fig/fig.png "fig")
 
 ## Requirements:
-- regex
-- gensim
-- tensorflow (>= 0.12)
+```
+pip install regex gensim tensorflow
+```
+or
+```
+pip install -r requirements.txt
+```
 
 ## Installation:
 ```
