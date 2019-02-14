@@ -7,10 +7,6 @@ Train word embeddings with [gensim](https://github.com/RaRe-Technologies/gensim)
 ```
 pip install regex gensim tensorflow
 ```
-or
-```
-pip install -r requirements.txt
-```
 
 ## Installation:
 ```
